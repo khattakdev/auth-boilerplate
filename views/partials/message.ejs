@@ -1,0 +1,5 @@
+<% if (errors.length > 0) { %> <% for(const val of errors) { %>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <%= val %>
+</div>
+<% } %> <% } %>
