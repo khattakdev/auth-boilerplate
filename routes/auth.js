@@ -31,9 +31,6 @@ router.post("/register", async (req, res) => {
   }
 
   if (errors.length > 0) {
-    for (const value of errors) {
-      console.log(value);
-    }
     res.render("register", {
       errors,
       name,
@@ -74,12 +71,16 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", (req, res, next) => {
-  console.log(req.body.user);
   passport.authenticate("local", {
     successRedirect: "/home",
     failureRedirect: "/auth/login",
     failureFlash: true,
   })(req, res, next);
+});
+
+router.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/");
 });
 
 module.exports = router;
