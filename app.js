@@ -2,10 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
+const passport = require("passport");
 const mongoose = require("mongoose");
 const indexRoutes = require("./routes/index");
 const authRoutes = require("./routes/auth");
 
+require("./config/passport")(passport);
 const app = express();
 
 app.use(
@@ -16,6 +18,9 @@ app.use(
     cookie: { secure: true },
   })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(expressLayouts);
 app.set("view engine", "ejs");
