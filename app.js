@@ -1,11 +1,21 @@
 require("dotenv").config();
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const indexRoutes = require("./routes/index");
 const authRoutes = require("./routes/auth");
 
 const app = express();
+
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: true },
+  })
+);
 
 app.use(expressLayouts);
 app.set("view engine", "ejs");
