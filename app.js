@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
+const flash = require("connect-flash");
 const passport = require("passport");
 const mongoose = require("mongoose");
 const indexRoutes = require("./routes/index");
@@ -15,10 +16,9 @@ app.use(
     secret: "keyboard cat",
     resave: true,
     saveUninitialized: true,
-    cookie: { secure: true },
   })
 );
-
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -26,6 +26,12 @@ app.use(expressLayouts);
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
+app.use((req, res, next) => {
+  res.locals.success = req.flash("message");
+  res.locals.error = req.flash("error");
+
+  next();
+});
 app.use("/", indexRoutes);
 app.use("/auth", authRoutes);
 

@@ -1,4 +1,4 @@
-const localStrategy = require("passport-local").localStrategy;
+const localStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const User = require("../models/user");
@@ -8,13 +8,13 @@ function verification(passport) {
     new localStrategy(
       { usernameField: "email" },
       async (email, password, done) => {
-        const userExit = await User.findOne({ email });
+        const user = await User.findOne({ email });
 
-        if (!userExit) {
+        if (!user) {
           return done(null, false, { message: "The email is not registered" });
         }
 
-        bcrypt.compare(password, userExit.password, (err, isMatched) => {
+        bcrypt.compare(password, user.password, (err, isMatched) => {
           if (err) throw err;
 
           if (isMatched) {

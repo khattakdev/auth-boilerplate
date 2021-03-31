@@ -6,11 +6,13 @@ const passport = require("passport");
 const router = express.Router();
 
 router.get("/register", (req, res) => res.render("register", { errors: [] }));
-router.get("/login", (req, res) =>
+
+router.get("/login", (req, res) => {
   res.render("login", {
-    errors: [],
-  })
-);
+    errors: res.locals.error || [],
+    success: res.locals.success[0] || "",
+  });
+});
 
 router.post("/register", async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
@@ -63,15 +65,16 @@ router.post("/register", async (req, res) => {
           password: hash,
         });
 
-        await user.save();
-
-        res.redirect("login");
+        // await user.save();
+        req.flash("message", "You can now log in");
+        res.redirect("/auth/login");
       });
     });
   }
 });
 
 router.post("/login", (req, res, next) => {
+  console.log(req.body.user);
   passport.authenticate("local", {
     successRedirect: "/home",
     failureRedirect: "/auth/login",
