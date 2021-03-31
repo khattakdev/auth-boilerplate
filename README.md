@@ -15,7 +15,7 @@ $ npm install
 Create an `.env` file in your root
 
 ```
-MONGO_URI: <DB>
+MONGO_URI= <DB>
 ```
 
 ## Running the app locally
